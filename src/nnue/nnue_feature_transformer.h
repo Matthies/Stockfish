@@ -331,6 +331,37 @@ namespace Stockfish::Eval::NNUE {
       vec_cleanup();
 #endif
 
+#ifdef NNUEDEBUG
+      for (unsigned int c = 0; c < 2; c++)
+      {
+          std::cout << "\naccumulation (c=" << c << "):\n";
+          for (unsigned int i = 0; i < HalfDimensions / 2; i++) {
+              std::cout << std::hex << std::setfill('0') << std::setw(4) << (short)accumulation[c][i] << " ";
+              if (i % 16 == 15)
+                  std::cout << "   " << std::hex << std::setfill('0') << std::setw(3) << (int)(i / 16 * 16) << "\n";
+          }
+          std::cout << std::dec;
+
+          std::cout << "\npsqtaccumulation (c=" << c << "):\n";
+          for (unsigned int i = 0; i < 8; i++)
+          {
+              std::cout << std::dec << std::setfill(' ') << std::setw(6) << (int)psqtAccumulation[c][i] << " ";
+              if (i % 16 == 15 || (i + 1 == 8))
+                  std::cout << "   " << std::hex << std::setfill('0') << std::setw(3) << (int)(i / 16 * 16) << "\n";
+          }
+          std::cout << std::dec;
+      }
+
+      std::cout << "\ninput layer:\n";
+      for (unsigned int i = 0; i < HalfDimensions; i++) {
+          std::cout << std::hex << std::setfill('0') << std::setw(2) << (int)output[i] << " ";
+          if (i % 16 == 15)
+              std::cout << "   " << std::hex << std::setfill('0') << std::setw(3) << (int)(i / 16 * 16) << "\n";
+      }
+      std::cout << std::dec;
+#endif
+
+
       return psqt;
 
    } // end of function transform()

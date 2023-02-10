@@ -24,6 +24,7 @@
 #include <iostream>
 #include <algorithm>
 #include <type_traits>
+#include <iomanip>
 #include "../nnue_common.h"
 #include "simd.h"
 
@@ -362,6 +363,15 @@ namespace Stockfish::Eval::NNUE::Layers {
         OutputDimensions>(output, weights, biases, input);
 
 #endif
+#ifdef NNUEDEBUG
+      std::cout << "\nnetwork layer:\n";
+      for (unsigned int i = 0; i < OutputDimensions; i++) {
+          std::cout << std::dec << std::setfill(' ') << std::setw(6) << (int)output[i] << " ";
+          if (i % 16 == 15 || (i + 1 == OutputDimensions))
+              std::cout << "   " << std::hex << std::setfill('0') << std::setw(3) << (int)(i / 16 * 16) << "\n";
+      }
+      std::cout << std::dec;
+#endif
 
       return output;
     }
@@ -527,6 +537,15 @@ namespace Stockfish::Eval::NNUE::Layers {
         InputDimensions,
         PaddedInputDimensions,
         OutputDimensions>(output, weights, biases, input);
+#endif
+#ifdef NNUEDEBUG
+      std::cout << "\nnetwork layer:\n";
+      for (unsigned int i = 0; i < OutputDimensions; i++) {
+          std::cout << std::dec << std::setfill(' ') << std::setw(6) << (int)output[i] << " ";
+          if (i % 16 == 15 || (i + 1 == OutputDimensions))
+              std::cout << "   " << std::hex << std::setfill('0') << std::setw(3) << (int)(i / 16 * 16) << "\n";
+      }
+      std::cout << std::dec;
 #endif
 
       return output;

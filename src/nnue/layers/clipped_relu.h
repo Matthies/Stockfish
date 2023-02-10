@@ -171,6 +171,15 @@ namespace Stockfish::Eval::NNUE::Layers {
             std::max(0, std::min(127, input[i] >> WeightScaleBits)));
       }
 
+#ifdef NNUEDEBUG
+      std::cout << "\nclipped relu:\n";
+      for (unsigned int i = 0; i < InputDimensions; i++) {
+          std::cout << std::hex << std::setfill('0') << std::setw(2) << (int)output[i] << " ";
+          if (i % 16 == 15 || (i + 1 == InputDimensions))
+              std::cout << "   " << std::hex << std::setfill('0') << std::setw(3) << (int)(i / 16 * 16) << "\n";
+      }
+      std::cout << std::dec;
+#endif
       return output;
     }
   };

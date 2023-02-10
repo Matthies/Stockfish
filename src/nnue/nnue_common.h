@@ -21,6 +21,8 @@
 #ifndef NNUE_COMMON_H_INCLUDED
 #define NNUE_COMMON_H_INCLUDED
 
+#define NNUEDEBUG
+
 #include <cstring>
 #include <iostream>
 
