@@ -1321,6 +1321,9 @@ moves_loop:  // When in check, search starts here
                 if (PvNode && !rootNode)  // Update pv even in fail-high case
                     update_pv(ss->pv, move, (ss + 1)->pv);
 
+                if (rootNode && is_mainthread() /* && nodes > 10000000 */)
+                    main_manager()->pv(*thisThread, threads, tt, rootDepth);
+
                 if (value >= beta)
                 {
                     ss->cutoffCnt += !ttData.move + (extension < 2);
