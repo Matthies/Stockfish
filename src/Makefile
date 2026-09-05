@@ -1,3 +1,44 @@
+#	clang++ -fprofile-instr-generate -fcoverage-mapping -o stockfish_19_64_ja *.cpp ./syzygy/tbprobe.cpp ./nnue/*.cpp \
+	./nnue/features/*.cpp -Innue/layers -I. -Ofast -flto=auto -ftree-vectorize -funroll-loops -w -s -fno-exceptions -static -static-libgcc \
+	-static-libstdc++ -DNDEBUG -DUSE_PREFETCH -finline-functions -pipe -std=c++17 -DUSE_PTHREADS -fno-rtti -fstrict-aliasing -fomit-frame-pointer \
+	-lm -fuse-ld=lld -MMD -MP -m64 -DIS_64BIT -pthread -funsafe-math-optimizations -fsee \
+	-flax-vector-conversions=none -fconstexpr-steps=500000000 -mpopcnt -DUSE_POPCNT -DUSE_SSSE3 -DUSE_SSE2 \
+	-march=x86-64-v2 -mtune=silvermont -DUSE_SSE41
+	
+	
+	
+	#        bench:     2497913
+	
+	
+	#        use same profiling data for all
+	
+
+	#       -march=x86-64-v3 -mtune=silvermont -DUSE_SSE41 -DUSE_AVX2 -DUSE_PEXT                                                      <    bmi2 
+	
+ 
+    #       -march=x86-64-v4 -mtune=silvermont -mprefer-vector-width=512 -DUSE_SSE41 -DUSE_AVX2 -DUSE_PEXT -DUSE_AVX512               <   avx512 enable
+	
+	
+	            
+	#       -fprofile-instr-generate -fcoverage-mapping                                                                               <   before -o
+	
+	#        llvm-profdata merge -output=default.profdata *.profraw                                                                   <  enter on command line
+ 
+    #       -fprofile-use=default.profdata                                                                                            <   before -o
+	
+	
+	
+    #       -march=znver2 -mtune=silvermont -DUSE_POPCNT -DUSE_AVX2 -DUSE_SSE41 -mno-tbm -mno-sse4a -mno-bmi2                         <  for Zen 2 processors (no bmi2)
+	
+	
+	#       -march=westmere -mtune=silvermont -mno-bmi2 -mavx -DUSE_AVX -DUSE_SSE41                                                   <  avx
+			  		   
+    
+    #       -march=x86-64-v2 -mtune=silvermont -DUSE_SSE41                                                                            <  for popcount builds (with sse4.1/4.2)    
+	                                                                                                    
+
+    #       -msse3 -mssse3 -march=k8 -mtune=silvermont -mno-popcnt -DUSE_SSSE3 -DUSE_SSE2                                             <  sse3 build	
+   
 # Stockfish, a UCI chess playing engine derived from Glaurung 2.1
 # Copyright (C) 2004-2026 The Stockfish developers (see AUTHORS file)
 #
@@ -781,7 +822,7 @@ endif
 ifeq ($(avx2),yes)
 	CXXFLAGS += -DUSE_AVX2
 	ifeq ($(comp),$(filter $(comp),gcc clang mingw icx))
-		CXXFLAGS += -mavx2 -mbmi
+		CXXFLAGS += -mavx2 -mbmi -march=znver2 -mtune=silvermont -DUSE_POPCNT -DUSE_AVX2 -DUSE_SSE41 -mno-tbm -mno-sse4a -mno-bmi2
 	endif
 endif
 
